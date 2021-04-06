@@ -4,65 +4,31 @@ const express = require('express'),
   app = express(),
   port = process.env.port || 3000;
 
-const { graphql } = require("@octokit/graphql");
+const fs = require("fs");
+const zlib = require('zlib');
+
+const { getRepos } = require("./util/github");
+
+// Define routes
 
 app.get("/v1/google/repositories", async (req, res) => {
-  let afterToken;
-
-  const repos = [];
-  let runs = 0;
-  do {
-    const afterQuery = (afterToken) ? `, after: "${afterToken}"` : '';
-
-    const graphqlRes = await graphql(`
-      {
-        rateLimit {
-          limit
-          cost
-          remaining
-          resetAt
-        }
-        search(query: "org:google", type: REPOSITORY, first: 100${afterQuery}) {
-          pageInfo {
-            startCursor
-            hasNextPage
-            endCursor
-          }
-          repositoryCount
-          edges {
-            cursor
-            node {
-              ... on Repository {
-                name
-              }
-            }
-          }
-        }
-      }
-    `,
-    {
-      headers: {
-        authorization: `token ${process.env.GITHUB_AUTH_TOKEN}`,
-      },
-    });
-
-    // Let's add the current repos to our array
-    repos.push(...graphqlRes.search.edges.map(repo => {
-      return {
-        name: repo.node.name
-      }
-    }));
-
-    runs++;
-    if (graphqlRes.search.pageInfo.hasNextPage && graphqlRes.search.pageInfo.endCursor && runs < 3) {
-      afterToken = graphqlRes.search.pageInfo.endCursor;
-    } else {
-      afterToken = "";
-    }
-
-  } while (afterToken);
+  const repos = await getRepos();
 
   res.json(repos);
+});
+
+// TODO below method to be PUT
+// https://stackoverflow.com/a/59690398/11646872
+app.get("/v1/google/repositories/to_file", async (req, res) => {
+  const repos = await getRepos();
+
+  const z = zlib.createGzip();
+  const writeStream = fs.createWriteStream('test.json.gz');
+  z.pipe(writeStream);
+  z.write(JSON.stringify(repos));
+  z.end();
+
+  res.sendStatus(200);
 });
 
 app.get("*", (req, res) => {
