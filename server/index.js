@@ -20,6 +20,12 @@ server.get("/v1/google/repositories/to_file", async (req, res) => {
   const repos = await getRepos();
 
   const gz = zlib.createGzip();
+  gz.on("error", () => {
+    return res.status(500).send({
+      error: "Problem writing to file"
+    });
+  });
+
   const writeStream = fs.createWriteStream('test.json.gz');
   gz.pipe(writeStream);
   gz.write(JSON.stringify(repos));
