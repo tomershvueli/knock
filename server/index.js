@@ -40,6 +40,4 @@ server.get("*", (req, res) => {
   });
 });
 
-// server.listen(port, () => console.log(`Server runnning on port ${port}`));
-
 module.exports = server;

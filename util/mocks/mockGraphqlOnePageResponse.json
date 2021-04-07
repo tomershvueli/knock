@@ -1,0 +1,18 @@
+{
+  "search": {
+    "pageInfo": {
+      "hasNextPage": false
+    },
+    "edges": [{
+        "node": {
+          "name": "google-repo-1"
+        }
+      },
+      {
+        "node": {
+          "name": "google-repo-2"
+        }
+      }
+    ]
+  }
+}

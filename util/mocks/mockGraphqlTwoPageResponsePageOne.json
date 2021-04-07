@@ -1,0 +1,19 @@
+{
+  "search": {
+    "pageInfo": {
+      "hasNextPage": true,
+      "endCursor": "someRandomCursor"
+    },
+    "edges": [{
+        "node": {
+          "name": "google-repo-1"
+        }
+      },
+      {
+        "node": {
+          "name": "google-repo-2"
+        }
+      }
+    ]
+  }
+}
