@@ -30,7 +30,7 @@ describe("server tests", () => {
     const res = await supertest(server).get("/v1/google/repositories");
 
     expect(res.status).toBe(200);
-    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toBe(2);
   });
 });
