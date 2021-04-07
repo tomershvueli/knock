@@ -14,9 +14,8 @@ server.get("/v1/google/repositories", async (req, res) => {
   res.json(repos);
 });
 
-// TODO below method to be PUT
 // https://stackoverflow.com/a/59690398/11646872
-server.get("/v1/google/repositories/to_file", async (req, res) => {
+server.put("/v1/google/repositories/to_file", async (req, res) => {
   const repos = await getRepos();
 
   const gz = zlib.createGzip();
@@ -26,7 +25,7 @@ server.get("/v1/google/repositories/to_file", async (req, res) => {
     });
   });
 
-  const writeStream = fs.createWriteStream('test.json.gz');
+  const writeStream = fs.createWriteStream("/tmp/knock_interview.json.gz");
   gz.pipe(writeStream);
   gz.write(JSON.stringify(repos));
   gz.end();

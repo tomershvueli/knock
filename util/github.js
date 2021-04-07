@@ -1,6 +1,6 @@
 const { graphql } = require("@octokit/graphql");
 
-// I was simply going to paginate through Github's search results here, but apparently, they limit all Search queries to a max of 1000 items, no exceptions
+// I was simply going to paginate through Github's search results here, but apparently they limit all Search queries to a max of 1000 items, no exceptions
 // https://github.community/t/graphql-github-api-how-to-get-more-than-1000-pull-requests/13838/11
 // https://docs.github.com/en/rest/reference/search#about-the-search-api
 // ... *eyeroll*
